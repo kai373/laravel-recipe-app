@@ -90,10 +90,9 @@ class RecipeController extends Controller
     public function show(string $id)
     {
         // $recipe = Recipe::find($id);
-        $recipe = Recipe::with('ingredients', 'steps', 'reviews', 'user')
+        $recipe = Recipe::with('ingredients', 'steps', 'reviews.user', 'user')
             ->where('recipes.id', $id)
-            ->get();
-        $recipe = $recipe[0];
+            ->first();
         // dd($recipe);
         $recipe_recode = Recipe::find($id);
         // dd($recipe_recode);

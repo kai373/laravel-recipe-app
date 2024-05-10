@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
+    public function home()
+    {
+        return view('home');
+    }
     /**
      * Display a listing of the resource.
      */

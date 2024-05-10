@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -36,8 +37,10 @@ class RecipeController extends Controller
         // dd($filters);
 
         // get all recipes
-        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
+        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name', DB::raw('AVG(reviews.rating) as rating'))
             ->join('users', 'users.id', '=', 'recipes.user_id')
+            ->leftjoin('reviews', 'reviews.recipe_id', '=', 'recipes.id')
+            ->groupBy('recipes.id')
             ->orderBy('recipes.created_at', 'desc');
 
         if (!empty($filters)) {
@@ -46,6 +49,11 @@ class RecipeController extends Controller
                 // カテゴリーで絞り込み選択したカテゴリーIDが含まれているレシピを取得
                 $query->whereIn('recipes.category_id', $filters['categories']);
             }
+            if (!empty($filters['rating'])) {
+                // レビューの平均値が選択した評価以上のレシピを取得
+                $query->havingRaw('AVG(reviews.rating) >= ?', [$filters['rating']])
+                    ->orderBy('rating', 'desc');
+            }
             // もしキーワードが入力されていたら
             if (!empty($filters['title'])) {
                 // キーワードで絞り込み
@@ -53,7 +61,7 @@ class RecipeController extends Controller
             }
         }
         $recipes = $query->get();
-        dd($recipes);
+        // dd($recipes);
 
         $categories = Category::all();
 

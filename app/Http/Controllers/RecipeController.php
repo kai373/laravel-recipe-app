@@ -30,14 +30,30 @@ class RecipeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->all();
+        // dd($filters);
+
         // get all recipes
-        $recipes = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
+        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
             ->join('users', 'users.id', '=', 'recipes.user_id')
-            ->orderBy('recipes.created_at', 'desc')
-            ->get();
-        // dd($recipes);
+            ->orderBy('recipes.created_at', 'desc');
+
+        if (!empty($filters)) {
+            // もしカテゴリーが選択されていたら
+            if (!empty($filters['categories'])) {
+                // カテゴリーで絞り込み選択したカテゴリーIDが含まれているレシピを取得
+                $query->whereIn('recipes.category_id', $filters['categories']);
+            }
+            // もしキーワードが入力されていたら
+            if (!empty($filters['title'])) {
+                // キーワードで絞り込み
+                $query->where('recipes.title', 'like', '%' . $filters['title'] . '%');
+            }
+        }
+        $recipes = $query->get();
+        dd($recipes);
 
         $categories = Category::all();
 

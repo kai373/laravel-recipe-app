@@ -89,9 +89,15 @@ class RecipeController extends Controller
      */
     public function show(string $id)
     {
-        $recipe = Recipe::find($id);
+        // $recipe = Recipe::find($id);
+        $recipe = Recipe::with('ingredients', 'steps', 'reviews')
+            ->where('recipes.id', $id)
+            ->get();
+        $recipe = $recipe[0];
         // dd($recipe);
-        $recipe->increment('views');
+        $recipe_recode = Recipe::find($id);
+        // dd($recipe_recode);
+        $recipe_recode->increment('views');
 
         return view('recipes.show', compact('recipe'));
     }

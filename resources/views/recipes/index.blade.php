@@ -18,6 +18,7 @@
                     </div>
                 </a>
             @endforeach
+            {{ $recipes->links() }}
         </div>
         <div class="col-span-1 bg-white p-4 h-max sticky top-4">
             <form action="{{ route('recipe.index') }}" method="GET">

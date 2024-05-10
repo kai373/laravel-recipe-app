@@ -16,7 +16,9 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+            {{-- @include('layouts.navigation') --}}
+            @include('layouts.announce-header')
+            @include('layouts.global-header')
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -32,5 +34,6 @@
                 {{ $slot }}
             </main>
         </div>
+        @include('layouts.footer')
     </body>
 </html>

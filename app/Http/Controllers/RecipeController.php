@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class RecipeController extends Controller
 {
@@ -26,7 +28,7 @@ class RecipeController extends Controller
         //     ->orderBy('created_at', 'desc')
         //     ->limit(3)
         //     ->get();
-            
+
         // Recipe::with('user:id,name') というコードは、Eloquent ORMのイーガーローディングを使用しています。これは、Recipe モデルに関連付けられている User モデルのデータを事前にロードするために使われます。ここでの user:id,name は、関連する User モデルから id と name のみを選択して取得することを指示しています。
         // この方法により、各レシピに対してユーザー情報を取得する際に、全てのユーザー属性を取得する代わりに、必要な id と name のみを取得します。これにより、データの取得効率が向上し、アプリケーションのパフォーマンスが改善されます。
 
@@ -86,7 +88,9 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        return view('recipes.create');
+        $categories = Category::all();
+
+        return view('recipes.create', compact('categories'));
     }
 
     /**
@@ -94,7 +98,15 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $posts = $request->all();
+        // dd($posts);
+        Recipe::insert([
+            'id' => Str::ulid(),
+            'title' => $posts['title'],
+            'description' => $posts['description'],
+            'category_id' => $posts['category'],
+            'user_id' => Auth::id(),
+        ]);
     }
 
     /**

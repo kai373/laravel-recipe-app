@@ -9,19 +9,20 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [RecipeController::class, 'home'])->name('home');
-Route::get('/recipe', [RecipeController::class, 'index'])->name('recipe.index');
+Route::get('/recipes', [RecipeController::class, 'index'])->name('recipe.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/recipe/create', [RecipeController::class, 'create'])->name('recipe.create');
+    Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipe.create');
+    Route::post('/recipes', [RecipeController::class, 'store'])->name('recipe.store');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/recipe/{id}', [RecipeController::class, 'show'])->name('recipe.show');
+Route::get('/recipes/{id}', [RecipeController::class, 'show'])->name('recipe.show');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

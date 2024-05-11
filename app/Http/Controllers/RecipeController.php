@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RecipeController extends Controller
 {
@@ -100,11 +101,25 @@ class RecipeController extends Controller
     {
         $posts = $request->all();
         // dd($posts);
+
+        $image = $request->file('image');
+
+        $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
+
+        // dd($path);
+
+        $url = Storage::url($path);
+
+        // Storage::disk('s3')->url($path) がエラーを引き起こす場合、Storage::url($path) を使用してみてください。これは、デフォルトのディスク設定を使用してファイルのURLを生成します。もし s3 ディスクがデフォルトで設定されている場合、この方法で問題が解決するはずです。もしデフォルトが s3 でない場合は、config/filesystems.php で s3 をデフォルトディスクとして設定する必要があります。
+
+        // dd($url);
+
         Recipe::insert([
             'id' => Str::ulid(),
             'title' => $posts['title'],
             'description' => $posts['description'],
             'category_id' => $posts['category'],
+            'image' => $url,
             'user_id' => Auth::id(),
         ]);
     }

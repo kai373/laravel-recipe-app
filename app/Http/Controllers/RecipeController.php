@@ -12,11 +12,24 @@ class RecipeController extends Controller
     public function home()
     {
         // get all recipes
+
         $recipes = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
             ->join('users', 'users.id', '=', 'recipes.user_id')
             ->orderBy('recipes.created_at', 'desc')
             ->limit(3)
             ->get();
+
+        // ↓↓↓ 同じ SQL を実行するが、Eloquent のメソッドを使って書き換える ↓↓↓
+        // $recipes = Recipe::with('user:id,name')
+        //     // selectは省略
+        //     ->select('id', 'title', 'description', 'created_at', 'image')
+        //     ->orderBy('created_at', 'desc')
+        //     ->limit(3)
+        //     ->get();
+            
+        // Recipe::with('user:id,name') というコードは、Eloquent ORMのイーガーローディングを使用しています。これは、Recipe モデルに関連付けられている User モデルのデータを事前にロードするために使われます。ここでの user:id,name は、関連する User モデルから id と name のみを選択して取得することを指示しています。
+        // この方法により、各レシピに対してユーザー情報を取得する際に、全てのユーザー属性を取得する代わりに、必要な id と name のみを取得します。これにより、データの取得効率が向上し、アプリケーションのパフォーマンスが改善されます。
+
         // dd($recipes);
 
         $popular = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'recipes.views', 'users.name')

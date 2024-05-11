@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Recipe;
+use App\Models\Step;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -100,12 +101,12 @@ class RecipeController extends Controller
     public function store(Request $request)
     {
         $posts = $request->all();
+        $ulid = Str::ulid();
         // dd($posts);
 
         $image = $request->file('image');
 
         $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
-
         // dd($path);
 
         $url = Storage::url($path);
@@ -115,13 +116,23 @@ class RecipeController extends Controller
         // dd($url);
 
         Recipe::insert([
-            'id' => Str::ulid(),
+            'id' => $ulid,
             'title' => $posts['title'],
             'description' => $posts['description'],
             'category_id' => $posts['category'],
             'image' => $url,
             'user_id' => Auth::id(),
         ]);
+        $steps = [];
+        foreach($posts['steps'] as $key => $step){
+            $steps[$key] = [
+                'recipe_id' => $ulid,
+                'step_number' => $key + 1,
+                'description' => $step
+            ];
+        }
+        Step::insert($steps);
+        dd($steps);
     }
 
     /**

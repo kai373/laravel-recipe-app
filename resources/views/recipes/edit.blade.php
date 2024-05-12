@@ -3,12 +3,12 @@
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.13.0/Sortable.min.js"></script>
         <script src="/js/recipe/create.js"></script>
     </x-slot>
-    <form action="{{ route('recipe.store') }}" method="POST" class="w-10/12 p-4 mx-auto bg-white rounded"
+    <form action="{{ route('recipe.update', ['id' => $recipe['id']]) }}" method="POST" class="w-10/12 p-4 mx-auto bg-white rounded"
         enctype="multipart/form-data">
         @csrf
         @method('PATCH')
         <!-- クロスサイトリクエストフォージェリ -->
-        {{ Breadcrumbs::render('create') }}
+        {{ Breadcrumbs::render('edit') }}
         <div class="grid grid-cols-2 rounded border border-gray-500 my-4">
             <div class="col-span-1">
                 <img id="preview" class="object-cover w-full aspect-video" src="{{ $recipe['image'] }}"
@@ -20,7 +20,7 @@
                 <input type="text" name="title" value="{{ $recipe['title'] }}" placeholder="レシピ名"
                     class="border border-gray-300 p-2 mb-4 w-full rounded">
                 <textarea name="description" placeholder="レシピの説明" class="border border-gray-300 p-2 mb-4 w-full roundedl">{{ $recipe['description'] }}</textarea>
-                <select name="category" class="border border-gray-300 p-2 mb-4 w-full rounded">
+                <select name="category_id" class="border border-gray-300 p-2 mb-4 w-full rounded">
                     <option value="">カテゴリー</option>
                     @foreach ($categories as $c)
                         <option value="{{ $c['id'] }}"

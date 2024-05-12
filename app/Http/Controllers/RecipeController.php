@@ -181,7 +181,19 @@ class RecipeController extends Controller
             $is_my_recipe = true;
         }
 
-        return view('recipes.show', compact('recipe', 'is_my_recipe'));
+        $is_reviewed = false;
+        if (Auth::check()) {
+            $is_reviewed = $recipe->reviews->contains('user_id', Auth::id());
+            // 以下の記述は同じ処理を行います
+            // foreach ($recipe->reviews as $review) {
+            //     if ($review->user_id === Auth::id()) {
+            //         $is_reviewed = true;
+            //         break;
+            //     }
+            // }
+        }
+
+        return view('recipes.show', compact('recipe', 'is_my_recipe', 'is_reviewed'));
     }
 
     /**

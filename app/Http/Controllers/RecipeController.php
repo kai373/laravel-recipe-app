@@ -174,7 +174,13 @@ class RecipeController extends Controller
         // dd($recipe_recode);
         $recipe_recode->increment('views');
 
-        return view('recipes.show', compact('recipe'));
+        // レシピの投稿者とログインユーザーが一致しているか確認
+        $is_my_recipe = false;
+        if (Auth::check() && Auth::id() === $recipe->user_id) {
+            $is_my_recipe = true;
+        }
+
+        return view('recipes.show', compact('recipe', 'is_my_recipe'));
     }
 
     /**
@@ -182,7 +188,12 @@ class RecipeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $recipe = Recipe::with('ingredients', 'steps', 'reviews.user', 'user')
+            ->where('recipes.id', $id)
+            ->first();
+        $categories = Category::all();
+
+        return view('recipes.edit', compact('recipe', 'categories'));
     }
 
     /**

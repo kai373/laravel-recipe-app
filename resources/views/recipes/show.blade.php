@@ -33,6 +33,16 @@
             </div>
         </div>
     </div>
+    @if($is_my_recipe)
+    <div class="w-10/12 p-4 mx-auto bg-white rounded">
+        <a href="{{ route('recipe.edit', $recipe) }}" class="bg-blue-500 text-white p-2 rounded">編集</a>
+        {{-- <form action="{{ route('recipe.destroy', $recipe) }}" method="POST" class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="bg-red-500 text-white p-2 rounded">削除</button>
+        </form> --}}
+    </div>
+    @endif
     <!-- reviews -->
     <div class="w-10/12 p-4 mx-auto bg-white rounded">
         <h4 class="text-2xl font-bold mb-2">レビュー</h4>

@@ -269,6 +269,12 @@ class RecipeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Recipe::where('id', $id)->delete();
+        // 論理削除なので、以下の記述と同じ
+        // Recipe::where('id', $id)->update(['deleted_at' => now()]);
+
+        return redirect()
+            ->route('home')
+            ->with('feedback.warning', 'レシピを削除しました!');
     }
 }

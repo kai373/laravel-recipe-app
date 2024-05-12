@@ -119,4 +119,12 @@ window.onload = function () {
     `;
         ingredients.appendChild(ingredient);
     });
+
+    //destroy confirm
+    var destroy = document.getElementById("delete");
+    destroy.addEventListener("click", function (evt) {
+        if (!confirm("削除しますか？")) {
+            evt.preventDefault();
+        }
+    });
 }; // window.onload = function() {

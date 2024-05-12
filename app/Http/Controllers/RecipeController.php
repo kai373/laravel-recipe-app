@@ -192,6 +192,14 @@ class RecipeController extends Controller
         $recipe = Recipe::with('ingredients', 'steps', 'reviews.user', 'user')
             ->where('recipes.id', $id)
             ->first()->toArray();
+
+        if (!Auth::check() || Auth::id() !== $recipe['user_id']) {
+            abort(403);
+            // return redirect()
+            //     ->route('recipe.show', ['id' => $id])
+            //     ->with('feedback.error', '他のユーザーのレシピは編集できません');
+        }
+
         $categories = Category::all();
 
         return view('recipes.edit', compact('recipe', 'categories'));

@@ -24,6 +24,10 @@
         {{-- @include('layouts.navigation') --}}
         @include('layouts.announce-header')
         @include('layouts.global-header')
+        @if (session('feedback.success'))
+            <p class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                {{ session('feedback.success') }}</p>
+        @endif
 
         <!-- Page Heading -->
         @if (isset($header))

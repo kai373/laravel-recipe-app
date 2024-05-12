@@ -154,7 +154,9 @@ class RecipeController extends Controller
             Log::debug(print_r($th->getMessage(), true));
             throw $th;
         }
-        return redirect()->route('recipe.show', ['id' => $ulid]);
+        return redirect()
+            ->route('recipe.show', ['id' => $ulid])
+            ->with('feedback.success', 'レシピを投稿しました!');
     }
 
     /**

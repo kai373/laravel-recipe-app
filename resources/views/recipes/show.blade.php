@@ -39,7 +39,7 @@
     @endif
     <!-- reviews -->
     @guest
-        <p class="text-center text-gray-500">レビューを投稿するには<a href="{{ route('login') }}" class="text-blue-700">ログイン</a>してください
+        <p class="text-center text-gray-500 my-6">レビューを投稿するには<a href="{{ route('login') }}" class="text-blue-700">ログイン</a>してください
         </p>
     @endguest
     @auth

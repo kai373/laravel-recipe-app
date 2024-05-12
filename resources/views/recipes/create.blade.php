@@ -26,13 +26,13 @@
                 <h4 class="text-bold text-xl mb-4">材料を入力</h4>
                 <div id="ingredients">
                     @for ($i = 0; $i < 3; $i++)
-                        <div class="ingredient flex">
+                        <div class="ingredient flex items-center mb-4">
                             @include('components.bars-3')
                             <input type="text" name="ingredients[{{ $i }}][name]" placeholder="材料名"
-                                class="ingredient-name border border-gray-300 p-2 mb-4 w-full rounded">
-                            :
+                                class="ingredient-name border border-gray-300 p-2 ml-4 w-full rounded">
+                            <p class="mx-2">:</p>
                             <input type="text" name="ingredients[{{ $i }}][quantity]" placeholder="分量"
-                                class="ingredient-quantity border border-gray-300 p-2 mb-4 w-full rounded">
+                                class="ingredient-quantity border border-gray-300 p-2 w-full rounded">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 class="w-10 h-10 ml-4 ingredient-delete text-gray-600">
                                 <path fill-rule="evenodd"
@@ -42,6 +42,8 @@
                         </div>
                     @endfor
                 </div>
+                <button type="button" id="ingredient-add"
+                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">材料を追加する</button>
                 <!-- submit -->
                 <div class="flex justify-end">
                     <button type="submit"

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\Step;
 use Illuminate\Http\Request;
@@ -123,8 +124,19 @@ class RecipeController extends Controller
             'image' => $url,
             'user_id' => Auth::id(),
         ]);
+        // $posts['ingredients'] =$posts['ingredients'][0]['name']
+        // $posts['ingredients'] =$posts['ingredients'][0]['quantity']
+        $ingredients = [];
+        foreach ($posts['ingredients'] as $key => $ingredient) {
+            $ingredients[$key] = [
+                'recipe_id' => $ulid,
+                'name' => $ingredient['name'],
+                'quantity' => $ingredient['quantity']
+            ];
+        }
+        Ingredient::insert($ingredients);
         $steps = [];
-        foreach($posts['steps'] as $key => $step){
+        foreach ($posts['steps'] as $key => $step) {
             $steps[$key] = [
                 'recipe_id' => $ulid,
                 'step_number' => $key + 1,
